@@ -1,0 +1,23 @@
+{
+    "name": "dongnan/linktool",
+    "type": "library",
+    "description": "A useful library for PHP",
+    "keywords": ["linktool", "tool", "library"],
+    "homepage": "http://github.com/dongnan/LinkTool/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "dongnan",
+            "email": "hidongnan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "files": ["src/linktool/setup.php", "src/linktool/functions.php"],
+        "psr-4": {
+            "linktool\\": "src/linktool/"
+        }
+    }
+}
