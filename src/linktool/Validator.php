@@ -11,6 +11,8 @@
 
 namespace linktool;
 
+use linktool\Lang;
+
 /**
  * Validator
  * 通用验证类
@@ -22,16 +24,20 @@ class Validator {
 
     /**
      * 校验
-     * @param array $checks
-     * @param array $data
+     * @param array $checks <p>校验数据规则,例:<br/>
+     * 'username' => ['name' => '用户名', 'required' => true, 'type' => 'input', 'minlen' => 2, 'maxlen' => 30, 'when' => [LT_MODEL_INSERT => LT_VALIDATE_MUST, LT_MODEL_UPDATE => LT_VALIDATE_EXISTS]],<br/>
+     * 'status' => ['name' => '状态', 'type' => 'select', 'in' => [0,1,2,3], 'when' => [MODEL_INSERT => MUST_VALIDATE, MODEL_UPDATE => EXISTS_VALIDATE]],
+     * </p>
+     * @param array $data 待验证的数据
      * @param int $when LT_MODEL_INSERT|LT_MODEL_UPDATE
-     * @return array
+     * @return array    验证的结果
      */
     public static function check($checks, $data, $when) {
         $status = false;
         $error = [];
 
         foreach ($checks as $key => $check) {
+            //默认为字段存在则验证
             $which = LT_VALIDATE_EXISTS;
             //没有设置 when,则每次都验证;设置了指定的验证时间,则只在满足指定验证时间时验证
             if (!empty($check['when'])) {
@@ -43,7 +49,7 @@ class Validator {
                     continue;
                 }
             }
-            //存在字段则验证
+            //字段存在则验证
             if ($which == LT_VALIDATE_EXISTS && !isset($data[$key])) {
                 continue;
             }
@@ -59,63 +65,63 @@ class Validator {
             if (empty($data[$key])) {
                 //必填
                 if (isset($check['required']) && $check['required']) {
-                    $error[$key] = '请' . ($check['type'] === 'select' ? '选择' : '输入') . $check['name'];
+                    $error[$key] = Lang::get('_V_REQUIRED_', ['name' => $check['name'], 'type' => $check['type']]);
                     continue;
                 }
             } else {
                 //长度不足
                 if (isset($check['minlen']) && String::strlenUtf8($data[$key]) < $check['minlen']) {
-                    $error[$key] = "{$check['name']}长度不能小于{$check['minlen']}个字符";
+                    $error[$key] = Lang::get('_V_LESS_THEN_MINLEN_', ['name' => $check['name'], 'minlen' => $check['minlen']]);
                     continue;
                 }
                 //长度超出
                 if (isset($check['maxlen']) && String::strlenUtf8($data[$key]) > $check['maxlen']) {
-                    $error[$key] = "{$check['name']}长度不能大于{$check['maxlen']}个字符";
+                    $error[$key] = Lang::get('_V_GREATER_THEN_MAXLEN_', ['name' => $check['name'], 'maxlen' => $check['maxlen']]);
                     continue;
                 }
                 //小于值
                 if (isset($check['min']) && $data[$key] < $check['min']) {
-                    $error[$key] = "{$check['name']}不能小于{$check['min']}";
+                    $error[$key] = Lang::get('_V_LESS_THEN_MIN_', ['name' => $check['name'], 'min' => $check['min']]);
                     continue;
                 }
                 //大于值
                 if (isset($check['max']) && $data[$key] > $check['max']) {
-                    $error[$key] = "{$check['name']}不能大于{$check['max']}";
+                    $error[$key] = Lang::get('_V_GREATER_THEN_MAX_', ['name' => $check['name'], 'max' => $check['max']]);
                     continue;
                 }
                 //验证日期
                 if (isset($check['looseDate']) && $check['looseDate'] && !self::checkLooseDate($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证 in
                 if (isset($check['in']) && !in_array($data[$key], $check['in'])) {
-                    $error[$key] = "{$check['name']}的值不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_VALUE_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证邮箱
                 if (isset($check['email']) && $check['email'] && !self::checkEmail($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证电话号码
                 if (isset($check['tel']) && $check['tel'] && !self::checkTel($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证手机号
                 if (isset($check['mobile']) && $check['mobile'] && !self::checkMobile($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证邮政编码
                 if (isset($check['zipcode']) && $check['zipcode'] && !self::checkZipCode($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
                 //验证身份证号
                 if (isset($check['idcardnum']) && $check['idcardnum'] && !self::checkIdNum($data[$key])) {
-                    $error[$key] = "{$check['name']}格式不正确";
+                    $error[$key] = Lang::get('_V_INCORRECT_FORMAT_', ['name' => $check['name']]);
                     continue;
                 }
             }
