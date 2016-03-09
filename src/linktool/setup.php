@@ -11,7 +11,13 @@
 //常量定义
 /** 内存 */
 defined('LT_MEMORY_ON') || define('LT_MEMORY_ON', function_exists('memory_get_usage'));
-
+// 系统信息
+if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+    ini_set('magic_quotes_runtime', 0);
+    define('LT_MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? true : false);
+} else {
+    define('LT_MAGIC_QUOTES_GPC', false);
+}
 //验证条件
 /** 存在字段就验证（默认） */
 define('LT_VALIDATE_EXISTS', 0);
