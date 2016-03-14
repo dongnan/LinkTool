@@ -15,7 +15,7 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "files": ["src/linktool/setup.php", "src/linktool/functions.php"],
+        "files": ["src/setup.php", "src/functions.php"],
         "psr-4": {
             "linktool\\": "src/linktool/"
         }
