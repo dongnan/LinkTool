@@ -12,7 +12,6 @@
 namespace linktool;
 
 /**
- * Json
  * Json 工具类
  * 
  * @author Dong Nan <hidongnan@gmail.com>
