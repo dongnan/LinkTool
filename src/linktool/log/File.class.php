@@ -53,7 +53,7 @@ class File extends Log
      * @param string $path
      * @param int $level
      */
-    public function __construct($name, $path, $level = DEBUG)
+    public function __construct($name, $path, $level = Log::DEBUG)
     {
         $this->name = $name;
         $this->logfile = $path;
@@ -105,42 +105,42 @@ class File extends Log
 
     public function alert($message, $data = [])
     {
-        $this->log(ALERT, $message, $data);
+        $this->log(Log::ALERT, $message, $data);
     }
 
     public function critical($message, $data = [])
     {
-        $this->log(CRITICAL, $message, $data);
+        $this->log(Log::CRITICAL, $message, $data);
     }
 
     public function debug($message, $data = [])
     {
-        $this->log(DEBUG, $message, $data);
+        $this->log(Log::DEBUG, $message, $data);
     }
 
     public function emergency($message, $data = [])
     {
-        $this->log(EMERGENCY, $message, $data);
+        $this->log(Log::EMERGENCY, $message, $data);
     }
 
     public function error($message, $data = [])
     {
-        $this->log(ERROR, $message, $data);
+        $this->log(Log::ERROR, $message, $data);
     }
 
     public function info($message, $data = [])
     {
-        $this->log(INFO, $message, $data);
+        $this->log(Log::INFO, $message, $data);
     }
 
     public function notice($message, $data = [])
     {
-        $this->log(NOTICE, $message, $data);
+        $this->log(Log::NOTICE, $message, $data);
     }
 
     public function warning($message, $data = [])
     {
-        $this->log(WARNING, $message, $data);
+        $this->log(Log::WARNING, $message, $data);
     }
 
 }
