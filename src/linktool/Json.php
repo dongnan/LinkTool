@@ -31,10 +31,7 @@ class Json {
 
         $array = Url::encode($data);
         $json = json_encode($array);
-        //将urlendoce后的已经为\"的先转换为",防止被转成\\"
-        $json = str_replace('%5C%22', '%22', $json);
-        //将urlencode后的"替换为\"再入库，防止"未转义
-        $json = str_replace('%22', '%5C%22', $json);
+        $json = str_replace(array('%5C', '%22', '%0D', '%0A', '%09'), array('%5C%5C', '%5C%22', '%5Cr', '%5Cn', '%5Ct'), $json);
         $json = Url::decode($json);
 
         return $json;
@@ -49,8 +46,7 @@ class Json {
         if (is_array($data)) {
             return $data;
         } elseif (is_string($data) && in_array($data[0], ['{', '['])) {
-            $array = json_decode(str_replace(['#', "\r\n", "\r", "\n", "\t"], [':#', '##r#n##', '##r##', '##n##', '##t##'], $data), TRUE);
-            return String::replace([ '##r#n##', '##r##', '##n##', '##t##', ':#'], [ "\r\n", "\r", "\n", "\t", '#'], $array);
+            return (array) json_decode(str_replace(array("\r", "\n", "\t"), array("\\r", "\\n", "\\t"), $data), TRUE);
         } else {
             return $data;
         }
