@@ -35,7 +35,6 @@ class Register {
         // 优先执行设置获取或赋值
         if (is_string($name)) {
             if (!strpos($name, '.')) {
-                $name = strtoupper($name);
                 return isset(self::$register[$name]) ? self::$register[$name] : $default;
             }
             // 支持多维数组获取
@@ -56,7 +55,7 @@ class Register {
         if (empty($names)) {
             return $register;
         } else {
-            $name = strtoupper(trim(array_shift($names)));
+            $name = trim(array_shift($names));
             if ($name) {
                 if (isset($register[$name])) {
                     return self::getRecursive($register[$name], $names, $default);
