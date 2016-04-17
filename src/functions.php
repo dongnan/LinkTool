@@ -285,8 +285,7 @@ function tag_css($path, $site = 'asset', $version = '1.0') {
     if (!empty($site)) {
         $path = conf('SITE.' . $site) . $path;
     }
-    $htmlTag = '<link href="' . $path . '?v=' . $version . '" rel="stylesheet" type="text/css" />' . PHP_EOL;
-    return $htmlTag;
+    return '<link href="' . $path . '?v=' . $version . '" rel="stylesheet" type="text/css" />' . PHP_EOL;
 }
 
 /**
@@ -303,8 +302,7 @@ function tag_js($path, $site = 'asset', $version = '1.0') {
     if (!empty($site)) {
         $path = conf('SITE.' . $site) . $path;
     }
-    $htmlTag = '<script src="' . $path . '?v=' . $version . '" type="text/javascript"></script>' . PHP_EOL;
-    return $htmlTag;
+    return '<script src="' . $path . '?v=' . $version . '" type="text/javascript"></script>' . PHP_EOL;
 }
 
 /**
