@@ -37,8 +37,7 @@ class Image {
         $status = false;
         if (file_exists($src_file) && ($max_width > 0 || $max_height > 0)) {
             list($ori_w, $ori_h, $type, $attr) = getimagesize($src_file);
-            $ori_radio = $ori_w / $ori_h;
-            if (($ori_radio > 1 && $max_width > 0) || ($ori_radio < 0 && $max_height == 0 && $max_width > 0)) {
+            if ($max_width > 0 && $ori_w > $max_width && ($max_height == 0 || ($max_height > 0 && $ori_w / $max_width > $ori_h / $max_height))) {
                 $thumb_w = $ori_w > $max_width ? $max_width : $ori_w;
                 $thumb_h = $ori_h * $thumb_w / $ori_w;
             } else {
