@@ -41,7 +41,7 @@ class Image {
                 $thumb_w = $ori_w > $max_width ? $max_width : $ori_w;
                 $thumb_h = $ori_h * $thumb_w / $ori_w;
             } else {
-                $thumb_h = $ori_h > $max_height ? $max_height : $ori_h;
+                $thumb_h = $max_height > 0 && $ori_h > $max_height ? $max_height : $ori_h;
                 $thumb_w = $ori_w * $thumb_h / $ori_h;
             }
             $img_r = self::getImage($src_file);
@@ -113,12 +113,12 @@ class Image {
                             break;
                     }
                     $watermark_handle = self::getImage($watermark);
-                    $watermark_thumb = ImageCreateTrueColor($watermark_w, $watermark_h);
+                    $watermark_thumb  = ImageCreateTrueColor($watermark_w, $watermark_h);
                     if (($watermark_info[2] == IMAGETYPE_GIF) || ($watermark_info[2] == IMAGETYPE_PNG)) {
                         $trnprt_indx = imagecolortransparent($watermark_handle);
                         if ($trnprt_indx >= 0) {
                             $trnprt_color = imagecolorsforindex($watermark_handle, $trnprt_indx);
-                            $trnprt_indx = imagecolorallocate($watermark_thumb, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
+                            $trnprt_indx  = imagecolorallocate($watermark_thumb, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
                             imagefill($watermark_thumb, 0, 0, $trnprt_indx);
                             imagecolortransparent($watermark_thumb, $trnprt_indx);
                         } elseif ($watermark_info[2] == IMAGETYPE_PNG) {
