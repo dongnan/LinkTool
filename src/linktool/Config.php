@@ -20,7 +20,7 @@ namespace linktool;
  */
 class Config {
 
-    static private $config = [];
+    static private $config = array();
 
     /**
      * 获取配置
@@ -36,12 +36,11 @@ class Config {
         // 优先执行设置获取或赋值
         if (is_string($name)) {
             if (!strpos($name, '.')) {
-                $name = strtoupper($name);
                 return isset(self::$config[$name]) ? self::$config[$name] : $default;
             }
             // 支持多维数组获取
-            $name = explode('.', $name);
-            $first = strtoupper(trim(array_shift($name)));
+            $name  = explode('.', $name);
+            $first = trim(array_shift($name));
             if (isset(self::$config[$first])) {
                 return self::getRecursive(self::$config[$first], $name, $default);
             } else {
@@ -84,13 +83,30 @@ class Config {
     static public function set($name, $value = null) {
         // 配置定义
         if (is_string($name)) {
-            $name = strtoupper($name);
-            self::$config[$name] = $value;
+            if (!strpos($name, '.')) {
+                self::$config[$name] = $value;
+            } else {
+                $names  = explode('.', $name);
+                $config = & self::$config;
+                $len    = count($names);
+                $i      = 1;
+                foreach ($names as $n) {
+                    if ($i === $len) {
+                        $config[$n] = $value;
+                    } else {
+                        $config[$n] = isset($config[$n]) ? $config[$n] : array();
+                        $config     = & $config[$n];
+                    }
+                    $i ++;
+                }
+            }
             return true;
         }
         // 批量定义
         elseif (is_array($name)) {
-            self::$config = array_merge(self::$config, array_change_key_case($name, CASE_UPPER));
+            foreach ($name as $key => $val) {
+                self::set($key, $val);
+            }
             return true;
         }
         return false;
